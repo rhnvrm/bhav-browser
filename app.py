@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from datetime import datetime, timedelta
 from io import BytesIO
 from zipfile import ZipFile
@@ -6,6 +6,7 @@ from urllib.request import urlopen, HTTPError
 import csv
 import redis 
 import os
+import json
 app = Flask(__name__)
 
 BSE_URL = "https://www.bseindia.com/download/BhavCopy/Equity/"
@@ -70,9 +71,35 @@ def updateRedisWithCSV(file):
     redis_client.set('data:bhav_top_10', top_10)
     print("Processing Completed")
 
+@app.route('/search_autocomplete', methods=['POST'])
+def search_autocomplete():
+    data = request.data
+    query = json.loads(data.decode('utf8').replace("'", '"'))["query"]
+
+    r = redis_client.keys('query:name:'+query+'*')
+
+    return json.dumps([item.decode('utf8').split(":")[2] for item in r])
+
+
+@app.route('/search', methods=['POST'])
+def search():
+    data = request.data
+    query = json.loads(data.decode('utf8').replace("'", '"'))["query"]
+
+    r = redis_client.get('query:name:' + query)
+    result = json.loads(r.decode('utf8').replace("'", '"'))
+    result["name"] = query
+    return json.dumps({
+        "result":result
+    })
+
+    
 @app.route('/')
-def method_name():
-   return 'Hello World!'
+def home_page():
+    r = redis_client.get('data:bhav_top_10')
+    my_json = r.decode('utf8').replace("'", '"')
+    data = json.loads(my_json)
+    return render_template('home.html', data=data)
 
 @app.route('/update_bhav')
 def fetchAndUpdateBhav():    
@@ -89,5 +116,5 @@ def fetchAndUpdateBhav():
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 8000))
-    app.run(host="0.0.0.0", port=8000)
+    app.run(host="0.0.0.0", port=8000, debug=True)
 

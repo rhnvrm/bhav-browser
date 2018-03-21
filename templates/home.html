@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+    <title>Zerodha</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class=page>
+        <h1>Search</h1>
+        <input type="text" id="query">
+        <button id="search">search</button>
+        <h1>Top 10</h1>
+        <table>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Close</th>
+            </tr>
+            {% for row in data %}
+            <tr>
+                <td>{{row["code"]}}</td>
+                <td>{{row["name"]}}</td>
+                <td>{{row["open"]}}</td>
+                <td>{{row["high"]}}</td>
+                <td>{{row["low"]}}</td>
+                <td>{{row["close"]}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <script>
+        $("#search").click(function () {
+            console.log($("#query").val())
+        })
+    </script>
+</body>
+</html>
