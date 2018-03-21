@@ -73,9 +73,9 @@ def updateRedisWithCSV(file):
 
 @app.route('/search_autocomplete', methods=['POST'])
 def search_autocomplete():
-    data = request.data
-    query = json.loads(data.decode('utf8').replace("'", '"'))["query"]
-
+    data = request.form
+    query = data["query"].upper()
+    print(query)
     r = redis_client.keys('query:name:'+query+'*')
 
     return json.dumps([item.decode('utf8').split(":")[2] for item in r])
@@ -83,9 +83,9 @@ def search_autocomplete():
 
 @app.route('/search', methods=['POST'])
 def search():
-    data = request.data
-    query = json.loads(data.decode('utf8').replace("'", '"'))["query"]
-
+    data = request.form
+    query = data["query"].upper()
+    print(query)
     r = redis_client.get('query:name:' + query)
     result = json.loads(r.decode('utf8').replace("'", '"'))
     result["name"] = query

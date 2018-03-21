@@ -8,7 +8,7 @@
     <div class=page>
         <h1>Search</h1>
         <input type="text" id="query">
-        <button id="search">search</button>
+        <div id="autocomplete"></div>
         <h1>Top 10</h1>
         <table>
             <tr>
@@ -32,9 +32,45 @@
         </table>
     </div>
     <script>
-        $("#search").click(function () {
-            console.log($("#query").val())
+        $("#query").on('input',function () {
+            $("#autocomplete").html("");
+            $.post("/search_autocomplete", { query: $("#query").val()})
+            .done(function (data) {
+                data = JSON.parse(data)
+                data.forEach(element => {
+                    var item = `<div onclick="loadData('${element}')">${element}</div>`;
+                    $("#autocomplete").append(item)
+                });
+            });
         })
+
+        function loadData(query) {
+            $.post("/search", { query: query })
+            .done(function (data) {
+                data = JSON.parse(data)
+                $("#autocomplete").html("");
+                $("#autocomplete").html(`<table>
+            <tr>
+                <th>Code</th>
+                <th>Name</th>
+                <th>Open</th>
+                <th>High</th>
+                <th>Low</th>
+                <th>Close</th>
+            </tr>
+            <tr>
+                <td>${data.result.code}</td>
+                <td>${data.result.name}</td>
+                <td>${data.result.open}</td>
+                <td>${data.result.high}</td>
+                <td>${data.result.low}</td>
+                <td>${data.result.close}</td>
+            </tr>
+            
+            `);
+
+            });
+        }
     </script>
 </body>
 </html>
