@@ -14,6 +14,7 @@ REDIS_USER = os.environ.get('REDIS_USER', '')
 REDIS_PORT = os.environ.get('REDIS_PORT', '')
 REDIS_PASS = os.environ.get('REDIS_PASS', '')
 
+redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASS)
 
 def generateBhavFileURL(date):
     return BSE_URL + "EQ" + date + "_CSV.ZIP"
@@ -87,7 +88,6 @@ def fetchAndUpdateBhav():
     )
 
 if __name__ == '__main__':
-    redis_client = redis.StrictRedis(host=REDIS_HOST, port=REDIS_PORT, password=REDIS_PASS)
     port = int(os.environ.get('PORT', 8000))
     app.run(host="0.0.0.0", port=8000)
 
