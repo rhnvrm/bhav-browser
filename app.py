@@ -71,7 +71,7 @@ def updateRedisWithCSV(file):
 
 @app.route('/')
 def method_name():
-   pass
+   return 'Hello World!'
 
 @app.route('/update_bhav')
 def fetchAndUpdateBhav():    
