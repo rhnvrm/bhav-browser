@@ -67,7 +67,7 @@ def updateRedisWithCSV(file):
 
     redis_client.set('data:bhav', bhav_data)
 
-    top_10 = sorted(bhav_data, key=lambda k: k['close'])[:10]
+    top_10 = sorted(bhav_data, key=lambda k: k['close'], reverse=True)[:10]
     redis_client.set('data:bhav_top_10', top_10)
     print("Processing Completed")
 

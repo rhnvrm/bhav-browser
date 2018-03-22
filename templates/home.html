@@ -2,15 +2,22 @@
 <html>
 <head>
     <title>Zerodha</title>
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous"> -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-material-design/4.0.2/bootstrap-material-design.css"
+        />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class=page>
-        <h1>Search</h1>
-        <input type="text" id="query">
-        <div id="autocomplete"></div>
-        <h1>Top 10</h1>
-        <table>
+    <div class="container">
+        <h1>Zerodha Bhav Browser</h1>
+        <h3>Search</h3>
+        <input type="text" class="form-control" id="query">
+        <ul class="list-group" id="autocomplete"></ul>
+        <h3>Top Ten</h3>
+        <table class="table">
             <tr>
                 <th>Code</th>
                 <th>Name</th>
@@ -38,7 +45,11 @@
             .done(function (data) {
                 data = JSON.parse(data)
                 data.forEach(element => {
-                    var item = `<div onclick="loadData('${element}')">${element}</div>`;
+                    var item = `
+                    <li class="list-group-item">
+                    <div onclick="loadData('${element}')">${element}</div>
+                    </li>
+                    `;
                     $("#autocomplete").append(item)
                 });
             });
@@ -49,7 +60,7 @@
             .done(function (data) {
                 data = JSON.parse(data)
                 $("#autocomplete").html("");
-                $("#autocomplete").html(`<table>
+                $("#autocomplete").html(`<table class="table">
             <tr>
                 <th>Code</th>
                 <th>Name</th>
