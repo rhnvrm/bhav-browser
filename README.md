@@ -9,6 +9,10 @@ Tech Used:
 - Redis
 - HTML/CSS
 
+## Sreenshot
+
+![screenshot.png](screenshot.png)
+
 ## Setup
 
 ```sh
